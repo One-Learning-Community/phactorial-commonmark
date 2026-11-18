@@ -40,12 +40,13 @@ final class MathExtension implements ConfigurableExtensionInterface
     public function register(EnvironmentBuilderInterface $environment): void
     {
         // The configuration is frozen only after registration, so the renderer reads it on its first render.
+        // Fences outrank code highlighters (Phiki and spatie/laravel-markdown register at 10); other fences fall through to them.
         $renderer = new MathNodeRenderer(new MathHtml($environment->getConfiguration()));
         $environment
             ->addInlineParser(new MathInlineParser(), 50)
             ->addEventListener(DocumentParsedEvent::class, new MathBlockListener())
             ->addRenderer(MathInline::class, $renderer)
             ->addRenderer(MathBlock::class, $renderer)
-            ->addRenderer(FencedCode::class, $renderer, 10);
+            ->addRenderer(FencedCode::class, $renderer, 50);
     }
 }
