@@ -1,0 +1,71 @@
+{
+    "name": "phactorial/commonmark",
+    "description": "GitHub's math syntax for league/commonmark, typeset on the server as SVG or MathML with Phactorial.",
+    "type": "library",
+    "license": "MIT",
+    "homepage": "https://github.com/One-Learning-Community/phactorial",
+    "support": {
+        "issues": "https://github.com/One-Learning-Community/phactorial/issues",
+        "source": "https://github.com/One-Learning-Community/phactorial"
+    },
+    "authors": [
+        {
+            "name": "One Learning Community",
+            "role": "Maintainer"
+        }
+    ],
+    "keywords": [
+        "commonmark",
+        "markdown",
+        "math",
+        "latex",
+        "mathml",
+        "svg",
+        "phactorial"
+    ],
+    "require": {
+        "php": "^8.4",
+        "league/commonmark": "^2.6",
+        "phactorial/phactorial": "^0.18"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^2.3",
+        "phpunit/phpunit": "^13.4"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../core",
+            "options": {
+                "symlink": true,
+                "versions": {
+                    "phactorial/phactorial": "0.18.x-dev"
+                }
+            }
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Phactorial\\CommonMark\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Phactorial\\CommonMark\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "analyse": "phpstan analyse --memory-limit=1G"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "0.18.x-dev"
+        }
+    }
+}
