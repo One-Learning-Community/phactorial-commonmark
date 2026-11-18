@@ -1,5 +1,7 @@
 # phactorial/commonmark
 
+[![phactorial/commonmark](https://img.shields.io/packagist/v/phactorial/commonmark?label=phactorial/commonmark)](https://packagist.org/packages/phactorial/commonmark) [![commonmark](https://github.com/One-Learning-Community/phactorial/actions/workflows/commonmark.yml/badge.svg?branch=main)](https://github.com/One-Learning-Community/phactorial/actions/workflows/commonmark.yml)
+
 GitHub's math syntax for [league/commonmark](https://commonmark.thephpleague.com/), typeset on the server as SVG or
 MathML with [Phactorial](https://github.com/One-Learning-Community/phactorial). The page needs no JavaScript and no
 math font.
