@@ -1,7 +1,7 @@
 # phactorial/commonmark
 
 GitHub's math syntax for [league/commonmark](https://commonmark.thephpleague.com/), typeset on the server as SVG or
-MathML with [Phactorial](https://gh.ali360.cloudns.ch/One-Learning-Community/phactorial). The page needs no JavaScript and no
+MathML with [Phactorial](https://github.com/One-Learning-Community/phactorial). The page needs no JavaScript and no
 math font.
 
 ## Install
