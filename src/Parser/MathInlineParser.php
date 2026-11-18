@@ -27,6 +27,8 @@ use Phactorial\CommonMark\Node\MathInline;
  * "$$" closers, the newlines and the code-span openers are each listed once per paragraph, and every opener finds
  * its closer, and any newline or code span in between, by binary search. A single-dollar formula cannot contain a
  * dollar sign, so its scan ends at the next one.
+ *
+ * @internal Engine detail, not public API. It may change in any release.
  */
 final class MathInlineParser implements InlineParserInterface
 {
@@ -41,10 +43,7 @@ final class MathInlineParser implements InlineParserInterface
     private bool $displayMode = false;
     /** @var list<int>|null Offsets of the usable "$$" closers; built when first needed. */
     private ?array $closers = null;
-    /** @var list<int>|null */
-    private ?array $newlines = null;
-    /** @var list<int>|null Offsets of the backtick runs that open a code span; built when first needed. */
-    private ?array $codeOpeners = null;
+    private ?ParagraphScan $scan = null;
 
     public function getMatchDefinition(): InlineParserMatch
     {
@@ -90,7 +89,7 @@ final class MathInlineParser implements InlineParserInterface
             return null;
         }
         if (preg_match('/\G\$([^$\n]+)(?<!\\\\)\$(?!' . self::WORD . ')/', $text, $m, 0, $pos) !== 1
-            || $this->hasCodeSpan($text, $pos + 1, strlen($m[1]))) {
+            || $this->scan()->hasCodeSpan($pos + 1, strlen($m[1]))) {
             return null;
         }
 
@@ -103,18 +102,18 @@ final class MathInlineParser implements InlineParserInterface
         if (! $this->displayMode && ctype_space($text[$pos + 2] ?? ' ')) {
             return null;
         }
-        $closer = self::firstAtOrAfter($this->closers($text), $pos + 3);
+        $closer = ParagraphScan::firstAtOrAfter($this->closers($text), $pos + 3);
         if ($closer === null) {
             return null;
         }
         if (! $this->displayMode) {
-            $newline = self::firstAtOrAfter($this->newlines($text), $pos);
+            $newline = $this->scan()->firstNewlineAtOrAfter($pos);
             if ($newline !== null && $newline < $closer) {
                 return null;
             }
         }
         $tex = substr($text, $pos + 2, $closer - $pos - 2);
-        if ($this->hasCodeSpan($text, $pos + 2, strlen($tex))) {
+        if ($this->scan()->hasCodeSpan($pos + 2, strlen($tex))) {
             return null;
         }
 
@@ -129,9 +128,8 @@ final class MathInlineParser implements InlineParserInterface
         $this->cursorRef = \WeakReference::create($cursor);
         $position = strrpos($text, '`$');
         $this->lastBacktickCloser = $position === false ? -1 : $position;
-        $this->codeOpeners = null;
+        $this->scan = new ParagraphScan($text);
         $this->closers = null;
-        $this->newlines = null;
         $this->displayMode = str_starts_with($text, '$$') && str_ends_with(rtrim($text), '$$');
     }
 
@@ -161,76 +159,8 @@ final class MathInlineParser implements InlineParserInterface
         return $this->closers = $closers;
     }
 
-    /** @return list<int> */
-    private function newlines(string $text): array
+    private function scan(): ParagraphScan
     {
-        if ($this->newlines !== null) {
-            return $this->newlines;
-        }
-        $newlines = [];
-        for ($n = strpos($text, "\n"); $n !== false; $n = strpos($text, "\n", $n + 1)) {
-            $newlines[] = $n;
-        }
-
-        return $this->newlines = $newlines;
-    }
-
-    /**
-     * The smallest value in the sorted list that is at least $from, or null.
-     *
-     * @param list<int> $sorted
-     */
-    private static function firstAtOrAfter(array $sorted, int $from): ?int
-    {
-        $low = 0;
-        $high = count($sorted);
-        while ($low < $high) {
-            $mid = ($low + $high) >> 1;
-            if ($sorted[$mid] < $from) {
-                $low = $mid + 1;
-            } else {
-                $high = $mid;
-            }
-        }
-
-        return $sorted[$low] ?? null;
-    }
-
-    /** Whether a code span opens inside the $length bytes of formula starting at $from. */
-    private function hasCodeSpan(string $text, int $from, int $length): bool
-    {
-        $opener = self::firstAtOrAfter($this->codeOpeners($text), $from);
-
-        return $opener !== null && $opener < $from + $length;
-    }
-
-    /** @return list<int> Offsets of the backtick runs that open a code span, ascending. */
-    private function codeOpeners(string $text): array
-    {
-        if ($this->codeOpeners !== null) {
-            return $this->codeOpeners;
-        }
-        preg_match_all('/`+/', $text, $runs, PREG_OFFSET_CAPTURE);
-        $runs = $runs[0];
-        $byLength = [];
-        foreach ($runs as $i => [$run]) {
-            $byLength[strlen($run)][] = $i;
-        }
-        $pointers = [];
-        $openers = [];
-        for ($i = 0, $count = count($runs); $i < $count; $i++) {
-            $length = strlen($runs[$i][0]);
-            $pointers[$length] ??= 0;
-            while (isset($byLength[$length][$pointers[$length]]) && $byLength[$length][$pointers[$length]] <= $i) {
-                $pointers[$length]++;
-            }
-            $closer = $byLength[$length][$pointers[$length]] ?? null;
-            if ($closer !== null) {
-                $openers[] = $runs[$i][1];
-                $i = $closer;
-            }
-        }
-
-        return $this->codeOpeners = $openers;
+        return $this->scan ?? throw new \LogicException('parse() prepares the scan first.');
     }
 }

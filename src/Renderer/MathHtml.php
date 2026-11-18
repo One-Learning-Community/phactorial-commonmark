@@ -9,7 +9,11 @@ use Phactorial\NoteLevel;
 use Phactorial\CommonMark\MathOutput;
 use Phactorial\MathRender;
 
-/** Turns TeX into the HTML a renderer emits; shared by the block, inline and fenced-code renderers. */
+/**
+ * Turns TeX into the HTML a renderer emits; shared by the block, inline and fenced-code renderers.
+ *
+ * @internal Engine detail, not public API. It may change in any release.
+ */
 final class MathHtml
 {
     private ?MathOutput $output = null;

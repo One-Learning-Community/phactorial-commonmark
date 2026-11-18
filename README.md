@@ -54,6 +54,8 @@ The extension works alongside `GithubFlavoredMarkdownExtension`.
 | `\$` | A literal dollar sign. |
 | `[link $x$](…)` | Plain text: GitHub does not typeset math inside link text. |
 
+With `latex_delimiters` on, two more forms are math. `\(…\)` is inline math on one line. `\[…\]` is display math that may span lines, and a paragraph holding only one becomes a display block. A `\)` or `\]` closes the formula only when its own backslash is not escaped, so `\[a\\]` stays text. An unclosed opener, blank TeX or a code span inside leaves the backslash an ordinary escape: `\(x` reads `(x`.
+
 Add `.math-display { display: block; text-align: center; }` to your CSS to center the display math that sits inside a
 paragraph.
 
@@ -66,6 +68,7 @@ All options live under the `math` key.
 | `output` | `svg`, `mathml` | `svg` | `svg` draws each formula as an inline `<svg>` that looks the same everywhere. `mathml` writes MathML Core for the browser to draw. |
 | `size` | a number above 0 | `16` | The font size in pixels for SVG output. |
 | `on_error` | `source`, `render` | `source` | What a formula the reader could not fully parse becomes: `source` shows the formula's Markdown unchanged, `render` draws what the reader recovered. |
+| `latex_delimiters` | `true`, `false` | `false` | `true` also reads `\(…\)` as inline math and `\[…\]` as display math, the way LaTeX and chatbots write them. It is off by default because `\(` and `\[` are Markdown's escaped parentheses and brackets: with it on, `\[citation needed\]` becomes a formula. |
 
 An invalid value throws `League\Config\Exception\ValidationException` on the first render.
 

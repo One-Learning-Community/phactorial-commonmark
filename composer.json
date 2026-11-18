@@ -26,7 +26,8 @@
     "require": {
         "php": "^8.4",
         "league/commonmark": "^2.6",
-        "phactorial/phactorial": "^0.18"
+        "nette/schema": "^1.2",
+        "phactorial/phactorial": "^0.19"
     },
     "require-dev": {
         "phpstan/phpstan": "^2.3",
@@ -39,7 +40,7 @@
             "options": {
                 "symlink": true,
                 "versions": {
-                    "phactorial/phactorial": "0.18.x-dev"
+                    "phactorial/phactorial": "0.19.x-dev"
                 }
             }
         }
@@ -65,7 +66,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "0.18.x-dev"
+            "dev-main": "0.19.x-dev"
         }
     }
 }

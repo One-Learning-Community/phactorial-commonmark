@@ -8,7 +8,15 @@ use League\CommonMark\Node\Block\AbstractBlock;
 
 final class MathBlock extends AbstractBlock
 {
-    public string $tex = '';
-    /** The Markdown the formula was read from, delimiters included. */
-    public string $source = '';
+    /**
+     * $source is the Markdown the formula was read from, delimiters included.
+     *
+     * @internal Engine detail, not public API.
+     */
+    public function __construct(
+        public readonly string $tex,
+        public readonly string $source,
+    ) {
+        parent::__construct();
+    }
 }

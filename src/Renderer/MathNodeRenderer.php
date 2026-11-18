@@ -11,7 +11,11 @@ use League\CommonMark\Renderer\NodeRendererInterface;
 use Phactorial\CommonMark\Node\MathBlock;
 use Phactorial\CommonMark\Node\MathInline;
 
-/** Renders math nodes, and ```math fences; returns null for any other fence so the stock renderer takes it. */
+/**
+ * Renders math nodes, and ```math fences; returns null for any other fence so the stock renderer takes it.
+ *
+ * @internal Engine detail, not public API. It may change in any release.
+ */
 final class MathNodeRenderer implements NodeRendererInterface
 {
     public function __construct(private MathHtml $html)

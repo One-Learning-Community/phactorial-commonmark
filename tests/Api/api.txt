@@ -1,0 +1,10 @@
+Phactorial\CommonMark\MathExtension | final class implements League\CommonMark\Extension\ConfigurableExtensionInterface, League\CommonMark\Extension\ExtensionInterface
+Phactorial\CommonMark\MathExtension::configureSchema() | (League\Config\ConfigurationBuilderInterface $builder): void
+Phactorial\CommonMark\MathExtension::register() | (League\CommonMark\Environment\EnvironmentBuilderInterface $environment): void
+Phactorial\CommonMark\Node\MathBlock | final class extends League\CommonMark\Node\Block\AbstractBlock
+Phactorial\CommonMark\Node\MathBlock::$source | readonly protected(set) string
+Phactorial\CommonMark\Node\MathBlock::$tex | readonly protected(set) string
+Phactorial\CommonMark\Node\MathInline | final class extends League\CommonMark\Node\Inline\AbstractInline
+Phactorial\CommonMark\Node\MathInline::$display | readonly protected(set) bool
+Phactorial\CommonMark\Node\MathInline::$source | readonly protected(set) string
+Phactorial\CommonMark\Node\MathInline::$tex | readonly protected(set) string

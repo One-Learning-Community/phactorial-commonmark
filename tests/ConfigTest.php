@@ -58,6 +58,12 @@ final class ConfigTest extends TestCase
         $this->convert(['on_error' => 'explode']);
     }
 
+    public function test_invalid_latex_delimiters_is_rejected(): void
+    {
+        $this->expectException(ValidationException::class);
+        $this->convert(['latex_delimiters' => 'yes']);
+    }
+
     public function test_on_error_accepts_both_values(): void
     {
         self::assertStringContainsString('<svg', $this->convert(['on_error' => 'source']));

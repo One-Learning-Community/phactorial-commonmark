@@ -7,9 +7,11 @@ namespace Phactorial\CommonMark\Tests;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\MarkdownConverter;
+use League\CommonMark\Parser\MarkdownParser;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Phactorial\CommonMark\MathExtension;
+use Phactorial\CommonMark\Node\MathBlock;
 
 final class SyntaxTest extends TestCase
 {
@@ -84,6 +86,32 @@ final class SyntaxTest extends TestCase
         self::assertStringContainsString('<p>é ', $html);
         self::assertStringContainsString('</span> ü ', $html);
         self::assertStringContainsString('</span> ö</p>', $html);
+    }
+
+    public function test_math_block_fields_are_read_only(): void
+    {
+        $environment = new Environment();
+        $environment->addExtension(new CommonMarkCoreExtension());
+        $environment->addExtension(new MathExtension());
+        $document = (new MarkdownParser($environment))->parse("$$\nx\n$$");
+
+        $block = null;
+        foreach ($document->iterator() as $node) {
+            if ($node instanceof MathBlock) {
+                $block = $node;
+            }
+        }
+        self::assertInstanceOf(MathBlock::class, $block);
+        self::assertSame('x', $block->tex);
+        self::assertStringStartsWith('$$', $block->source);
+
+        try {
+            $property = 'tex';
+            $block->$property = 'y'; // @phpstan-ignore assign.propertyProtectedSet
+            self::fail('Assigning tex must throw.');
+        } catch (\Error) {
+            self::assertSame('x', $block->tex);
+        }
     }
 
     public function test_svg_output_is_the_default(): void

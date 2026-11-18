@@ -12,6 +12,7 @@ use League\Config\ConfigurationBuilderInterface;
 use Nette\Schema\Expect;
 use Phactorial\CommonMark\Node\MathBlock;
 use Phactorial\CommonMark\Node\MathInline;
+use Phactorial\CommonMark\Parser\LatexInlineParser;
 use Phactorial\CommonMark\Parser\MathInlineParser;
 use Phactorial\CommonMark\Renderer\MathHtml;
 use Phactorial\CommonMark\Renderer\MathNodeRenderer;
@@ -19,8 +20,8 @@ use Phactorial\CommonMark\Renderer\MathNodeRenderer;
 /**
  * GitHub's math syntax in league/commonmark: $…$, $`…`$, $$…$$ and ```math fences, typeset on the server.
  *
- * Configuration lives under the `math` key: `output` ('svg' or 'mathml'), `size` (the SVG font size in pixels) and
- * `on_error` ('source' or 'render').
+ * Configuration lives under the `math` key: `output` ('svg' or 'mathml'), `size` (the SVG font size in pixels),
+ * `on_error` ('source' or 'render') and `latex_delimiters` (true also reads \(…\) and \[…\]; false by default).
  */
 final class MathExtension implements ConfigurableExtensionInterface
 {
@@ -34,6 +35,7 @@ final class MathExtension implements ConfigurableExtensionInterface
                 ->before(static fn (mixed $v): mixed => is_int($v) ? (float) $v : $v)
                 ->default(16.0),
             'on_error' => Expect::anyOf('source', 'render')->default('source'),
+            'latex_delimiters' => Expect::bool()->default(false),
         ]));
     }
 
@@ -44,6 +46,8 @@ final class MathExtension implements ConfigurableExtensionInterface
         $renderer = new MathNodeRenderer(new MathHtml($environment->getConfiguration()));
         $environment
             ->addInlineParser(new MathInlineParser(), 50)
+            // Above league/commonmark's escape parser (80), which would otherwise turn "\(" into "(" first.
+            ->addInlineParser(new LatexInlineParser(), 90)
             ->addEventListener(DocumentParsedEvent::class, new MathBlockListener())
             ->addRenderer(MathInline::class, $renderer)
             ->addRenderer(MathBlock::class, $renderer)
