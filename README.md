@@ -103,7 +103,7 @@ marks, and the text around them, with this extension's output. These cases diffe
 - `$$a$$b$$`: GitHub reads one formula and the text `b`, and drops the trailing `$$`. This extension keeps the `$$`
   as text.
 - GitHub puts a display formula inside a `<p>`. This extension emits a `<div>` for a paragraph that holds only that
-  formula, which carries the same formula.
+  formula, with the same formula inside.
 
 A pipe inside a table cell splits the cell in both renderers, because tables split before inline parsing: `$a|b$`
 becomes the cells `$a` and `b$`.
