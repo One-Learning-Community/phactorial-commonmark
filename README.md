@@ -75,6 +75,11 @@ To center display math written inside a paragraph, add:
 Each SVG formula carries `role="img"` and an `aria-label` that spells the formula out as text, so screen readers speak
 it. MathML output is text already, and screen readers read it directly.
 
+## Issues and pull requests
+
+Development happens in [One-Learning-Community/phactorial](https://github.com/One-Learning-Community/phactorial).
+Report issues and send pull requests there.
+
 ## Documentation
 
 The full guide lives at [one-learning-community.github.io/phactorial](https://one-learning-community.github.io/phactorial/commonmark.html).
