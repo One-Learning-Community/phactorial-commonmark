@@ -1,4 +1,11 @@
-# phactorial/commonmark
+<h1>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/One-Learning-Community/phactorial/raw/main/site/src/.vuepress/public/phactorial-wordmark-dark.svg">
+    <img alt="Phactorial" src="https://github.com/One-Learning-Community/phactorial/raw/main/site/src/.vuepress/public/phactorial-wordmark.svg" height="56">
+  </picture>
+</h1>
+
+## phactorial/commonmark
 
 [![phactorial/commonmark](https://img.shields.io/packagist/v/phactorial/commonmark?label=phactorial/commonmark)](https://packagist.org/packages/phactorial/commonmark) [![commonmark](https://github.com/One-Learning-Community/phactorial/actions/workflows/commonmark.yml/badge.svg?branch=main)](https://github.com/One-Learning-Community/phactorial/actions/workflows/commonmark.yml)
 
